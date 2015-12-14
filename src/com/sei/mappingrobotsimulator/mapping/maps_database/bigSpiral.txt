@@ -1,16 +1,16 @@
-11111111111111111111111111
-1                        1
-1 1111111111111111111111 1
-1 1                    1 1
-1 1 111111111111111111 1 1
-1 1 1                1 1 1
-1 1 1 11111111111111 1 1 1
-1 1 1 1              1 1 1
-1 1 1 1111111111111111 1 1
-1 1 1                  1 1
-1 1 11111111111111111111 1
-1 1                      1
-1 111111111111111111111111
-1                       s1
-11111111111111111111111111
+wwwwwwwwwwwwwwwwwwwwwwwwww
+w                        w
+w wwwwwwwwwwwwwwwwwwwwww w
+w w                    w w
+w w wwwwwwwwwwwwwwwwww w w
+w w w                w w w
+w w w wwwwwwwwwwwwww w w w
+w w w w              w w w
+w w w wwwwwwwwwwwwwwww w w
+w w w                  w w
+w w wwwwwwwwwwwwwwwwwwww w
+w w                      w
+w wwwwwwwwwwwwwwwwwwwwwwww
+w                       sw
+wwwwwwwwwwwwwwwwwwwwwwwwww
 END

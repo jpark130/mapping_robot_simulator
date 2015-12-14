@@ -6,10 +6,19 @@ package com.sei.mappingrobotsimulator.mapping;
 public class MapMovement {
     private MovementDirection direction;
     private int distance;
+    private boolean shouldRobotDoc;
 
-    public MapMovement(MovementDirection direction, int distance){
+    /**
+     * Defines a movement for the robot
+     *
+     * @param direction the direction of the movement
+     * @param distance the distance to move in that direction
+     * @param shouldRobotDoc a boolean representing whether the robot should stop if it reaches its charging station
+     */
+    public MapMovement(MovementDirection direction, int distance, boolean shouldRobotDoc){
         this.direction = direction;
         this.distance = distance;
+        this.shouldRobotDoc = shouldRobotDoc;
     }
 
     public MovementDirection getDirection() {
@@ -18,5 +27,9 @@ public class MapMovement {
 
     public int getDistance() {
         return distance;
+    }
+
+    public boolean getShouldRobotDoc() {
+        return shouldRobotDoc;
     }
 }

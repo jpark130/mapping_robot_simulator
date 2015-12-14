@@ -1,9 +1,9 @@
-11111111111111111111111
-1                     1
-1                     1
-1                     1
-1                     1
-1                     1
-1                    s1
-11111111111111111111111
+wwwwwwwwwwwwwwwwwwwwwww
+w                     w
+w                     w
+w                     w
+w                     w
+w                     w
+w                    sw
+wwwwwwwwwwwwwwwwwwwwwww
 END

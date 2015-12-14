@@ -1,10 +1,10 @@
-111111111111
-1          1
-1 111 1111 1
-1 111 1111 1
-1    s     1
-1 111 1111 1
-1 111 1111 1
-1          1
-111111111111
+wwwwwwwwwwww
+w          w
+w www wwww w
+w www wwww w
+w    s     w
+w www wwww w
+w www wwww w
+w          w
+wwwwwwwwwwww
 END
