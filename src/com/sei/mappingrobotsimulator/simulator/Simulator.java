@@ -1,6 +1,7 @@
 package com.sei.mappingrobotsimulator.simulator;
 
 import com.sei.mappingrobotsimulator.Robot;
+import com.sei.mappingrobotsimulator.decisionmakinginterfaces.BatteryDecayStub;
 import com.sei.mappingrobotsimulator.decisionmakinginterfaces.MovementAlgorthimStub;
 import com.sei.mappingrobotsimulator.decisionmakinginterfaces.RotationalUncertaintyStub;
 import com.sei.mappingrobotsimulator.mapping.*;
@@ -23,7 +24,7 @@ public class Simulator {
     public static void main(String[] args) {
         Map fromFile = MapBuilder.loadMapFromFile("src/com/sei/mappingrobotsimulator/mapping/maps_database/bigGrid.txt");
 
-        Robot r = new Robot(100.0f, 5.0f, new MovementAlgorthimStub(), new RotationalUncertaintyStub(),
+        Robot r = new Robot(100.0f, new BatteryDecayStub(5.0f), new MovementAlgorthimStub(), new RotationalUncertaintyStub(),
                   new ProbabilisticMap(fromFile.getMapWidth(), fromFile.getMapHeight()),fromFile.getStartingLocation());
         Simulator sim = new Simulator(fromFile, r);
         float similarity = sim.runSimulation();

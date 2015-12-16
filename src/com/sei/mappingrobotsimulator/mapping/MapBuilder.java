@@ -33,7 +33,7 @@ public class MapBuilder {
                 for(int i = 0; i < line.length(); i++){
                     char c = line.charAt(i);
                     if(c == 'w'){
-                        row.add(new MapPosition(mapRepresentation.size(), i, -1));
+                        row.add(new MapPosition(mapRepresentation.size(), i, Map.wall));
                     }else if(c == 's'){
                         row.add(new MapPosition(mapRepresentation.size(), i, 0));
                     }else{

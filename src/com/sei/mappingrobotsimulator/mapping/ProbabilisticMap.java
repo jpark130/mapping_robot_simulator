@@ -52,36 +52,39 @@ public class ProbabilisticMap {
         }
 
         currentBestGuess = Map.constructMapWithDimensions(initialKnoweldge.getMapWidth(), initialKnoweldge.getMapHeight());
-
     }
 
-    ///////
-    //Getter methods
-    //////
 
-    public  int getMapHeight(){
-        return probabilisticMap.size();
+    /**
+     * Updates the map after parsing through the effects of the most recent move
+     *
+     * @param attemptedMove the movement that the robot tried to make
+     * @param actualMove the movement that actually occured in the physical world
+     * @param possiblePositions all of the locations the robot might currently be in
+     * @param squareIdentifier the identifier of the square the robot is currently in
+     */
+
+    public void updateMapWithMovement(MapMovement attemptedMove, ProbabilisticMapMovement actualMove,
+                                      ArrayList<ProbabilisticMapPosition> possiblePositions, int squareIdentifier)
+    {
+        for(ProbabilisticMapPosition position: possiblePositions){
+            MapPosition endPosition = MapPosition.calculateTranslatedPosition(position, actualMove.getDirection(), actualMove.getDistance());
+            ProbabilisticMapPosition probabilisticMapPosition = new ProbabilisticMapPosition(endPosition, squareIdentifier, actualMove.getCertainty());
+            addPositionToMap(probabilisticMapPosition);
+
+            if(attemptedMove.getDistance() != actualMove.getDistance()){
+                MapPosition wallPosition = MapPosition.calculateTranslatedPosition(position, actualMove.getDirection(), actualMove.getDistance() + 1);
+                ProbabilisticMapPosition probWallPosition = new ProbabilisticMapPosition(wallPosition, Map.wall, position.getCertainty()*actualMove.getCertainty());
+            }
+        }
     }
-
-    public int getMapWidth(){
-        return probabilisticMap.get(0).size();
-    }
-
-    public ArrayList<ProbabilisticMapPosition> getAllValues(int xCord, int yCord){
-        return probabilisticMap.get(yCord).get(xCord);
-    }
-
-    public Map getBestGuessMap() {
-        return currentBestGuess;
-    }
-
 
     /**
      * Updates the information in the ProbabilisticMap given a ProbablisticMapPostition
      *
      * @param position the position information to add to the map
      */
-    public void addNewInformation(ProbabilisticMapPosition position) {
+    public void addPositionToMap(ProbabilisticMapPosition position) {
         ArrayList<ProbabilisticMapPosition> allValues = probabilisticMap.get(position.getyCord()).get(position.getxCord());
         //check to see if this value already exists as a probablity
         ProbabilisticMapPosition highestProbability = new ProbabilisticMapPosition(position, -1, 0.0f);
@@ -102,17 +105,53 @@ public class ProbabilisticMap {
             totalCertantyPercentage += current.getCertainty();
         }
 
+
         //Normalize the certainty percentage
-        for(int i = 0; i < allValues.size(); i++){
-            ProbabilisticMapPosition current = allValues.get(i);
-            current.normalize(totalCertantyPercentage);
-        }
+        //for(int i = 0; i < allValues.size(); i++){
+        //    ProbabilisticMapPosition current = allValues.get(i);
+        //    current.normalize(totalCertantyPercentage);
+        //}
 
         //If the value hasn't been updated, set a new value
         if(!valueAlreadyExists){
             probabilisticMap.get(position.getyCord()).get(position.getxCord()).add(position);
         }
 
-        currentBestGuess.setValueAtPosition(position);
+        currentBestGuess.setValueAtPosition(highestProbability);
     }
+
+
+    ///////
+    //Getter methods
+    //////
+
+    public  int getMapHeight(){
+        return probabilisticMap.size();
+    }
+
+    public int getMapWidth(){
+        return probabilisticMap.get(0).size();
+    }
+
+    public ArrayList<ProbabilisticMapPosition> getAllValues(int xCord, int yCord){
+        return probabilisticMap.get(yCord).get(xCord);
+    }
+
+    public ProbabilisticMapPosition getBestGuessForPosition(MapPosition position){
+        ArrayList<ProbabilisticMapPosition> possibilities =  probabilisticMap.get(position.getyCord()).get(position.getxCord());
+        ProbabilisticMapPosition highestProbability = new ProbabilisticMapPosition(position, 1, 0.0f);
+
+        for(ProbabilisticMapPosition p: possibilities){
+            if(p.getCertainty() > highestProbability.getCertainty()){
+                highestProbability = p;
+            }
+        }
+
+        return  highestProbability;
+    }
+
+    public Map getBestGuessMap() {
+        return currentBestGuess;
+    }
+
 }

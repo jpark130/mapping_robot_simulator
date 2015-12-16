@@ -1,5 +1,6 @@
 package com.sei.mappingrobotsimulator;
 
+import com.sei.mappingrobotsimulator.decisionmakinginterfaces.BatteryDecay;
 import com.sei.mappingrobotsimulator.decisionmakinginterfaces.MovementAlgorithm;
 import com.sei.mappingrobotsimulator.decisionmakinginterfaces.RotationalUncertainty;
 import com.sei.mappingrobotsimulator.mapping.ProbabilisticMapMovement;
@@ -18,10 +19,11 @@ public class Robot {
 
     //properties
     private float batteryLife;
-    private float batteryDecay;
+    private BatteryDecay batteryDecay;
     private boolean robotShouldDoc;
 
-    private MapPosition currentLocation;
+    private ArrayList<ProbabilisticMapPosition> possibleLocations;
+    private MapMovement attemptedMove;
 
     /**
      * Create a robot with batterLife information, a movement algorithm, and initial knowledge of the environment
@@ -33,23 +35,19 @@ public class Robot {
      * @param algo
      * @param initialEnvironmentKnowledge
      */
-    public Robot(float batteryLife, float batteryDecay, MovementAlgorithm algo,
+    public Robot(float batteryLife, BatteryDecay batteryDecay, MovementAlgorithm algo,
                  RotationalUncertainty rotationalMapping, ProbabilisticMap initialEnvironmentKnowledge,
                  MapPosition startingLocation){
-        if(batteryDecay <= 0){
-            throw new RuntimeException("Battery Decay must be greater than 0");
-        }
-
         this.batteryLife = batteryLife;
         this.batteryDecay = batteryDecay;
         this.algorithm = algo;
         this.robotShouldDoc = false;
-        this.mapper = new ProbabilisticMap(initialEnvironmentKnowledge);
-        this.currentLocation = startingLocation;
         this.rotationalMapping = rotationalMapping;
+        this.mapper = new ProbabilisticMap(initialEnvironmentKnowledge);
+
+        this.possibleLocations = new ArrayList<ProbabilisticMapPosition>();
+        possibleLocations.add(new ProbabilisticMapPosition(startingLocation, 0, 100.0f));
     }
-
-
 
     public boolean hasBatteryLife(){
         return (batteryLife > 0.0f);
@@ -67,18 +65,24 @@ public class Robot {
         }else{
             robotShouldDoc = false;
         }
+        attemptedMove = move;
         return move;
     }
 
     public void resultingPhysicalMovement(MapMovement m, int squareIdentifier){
         //process the movement that actually made
         ArrayList<ProbabilisticMapMovement> movementPossibilities = rotationalMapping.getMappingForMovement(m);
+        ArrayList<ProbabilisticMapPosition> updatedPossibleLocations = new ArrayList<ProbabilisticMapPosition>();
         for(ProbabilisticMapMovement possibleMovement: movementPossibilities){
-            MapPosition possiblePosition = currentLocation.calculateTranslatedPosition(currentLocation, possibleMovement.getDirection(), m.getDistance());
-            ProbabilisticMapPosition probabilisticMapPosition = new ProbabilisticMapPosition(possiblePosition, squareIdentifier, possibleMovement.getCertainty());
-            mapper.addNewInformation(probabilisticMapPosition);
+            mapper.updateMapWithMovement(attemptedMove, possibleMovement, possibleLocations, squareIdentifier);
+            for(ProbabilisticMapPosition oldLocation: possibleLocations) {
+                MapPosition newPosition = MapPosition.calculateTranslatedPosition(oldLocation, possibleMovement.getDirection(), possibleMovement.getDistance());
+                ProbabilisticMapPosition newLocation = new ProbabilisticMapPosition(newPosition, squareIdentifier, oldLocation.getCertainty()*possibleMovement.getCertainty());
+                updatedPossibleLocations.add(newLocation);
+            }
         }
-        batteryLife -= batteryDecay;
+        possibleLocations = updatedPossibleLocations;
+        batteryLife = batteryDecay.calculateReducedBatteryStrength(batteryLife, m);
     }
 
     public boolean robotSeekingDoc(){

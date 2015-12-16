@@ -7,6 +7,8 @@ import java.util.ArrayList;
  * Created by Kevin on 12/1/15.
  */
 public class Map {
+    public static int wall = -1;
+
     private ArrayList<ArrayList<MapPosition>>  mapPrimitive;
 
     public Map(ArrayList<ArrayList<MapPosition>>  mapPrimitive){
@@ -126,25 +128,25 @@ public class Map {
             for (int i = 1; i <= requestedMove.getDistance(); i++) {
                 switch (requestedMove.getDirection()) {
                     case MOVE_UP:
-                        if (currentY - i >= 0 && mapPrimitive.get(currentY - i).get(currentX).getSquareNumber() != 1) {
+                        if (currentY - i >= 0 && mapPrimitive.get(currentY - i).get(currentX).getSquareNumber() != wall) {
                             distanceActuallyTraveled++;
                         }
                         break;
 
                     case MOVE_LEFT:
-                        if (currentX - i >= 0 && mapPrimitive.get(currentY).get(currentX - i).getSquareNumber() != 1) {
+                        if (currentX - i >= 0 && mapPrimitive.get(currentY).get(currentX - i).getSquareNumber() != wall) {
                             distanceActuallyTraveled++;
                         }
                         break;
 
                     case MOVE_DOWN:
-                        if (currentY + i <= mapPrimitive.size() && mapPrimitive.get(currentY + i).get(currentX).getSquareNumber() != 1) {
+                        if (currentY + i <= mapPrimitive.size() && mapPrimitive.get(currentY + i).get(currentX).getSquareNumber() != wall) {
                             distanceActuallyTraveled++;
                         }
                         break;
 
                     case MOVE_RIGHT:
-                        if (currentX + i <= mapPrimitive.get(currentY).size() && mapPrimitive.get(currentY).get(currentX + i).getSquareNumber() != 1) {
+                        if (currentX + i <= mapPrimitive.get(currentY).size() && mapPrimitive.get(currentY).get(currentX + i).getSquareNumber() != wall) {
                             distanceActuallyTraveled++;
                         }
                         break;

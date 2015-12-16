@@ -13,4 +13,3 @@ w w                      w
 w wwwwwwwwwwwwwwwwwwwwwwww
 w                       sw
 wwwwwwwwwwwwwwwwwwwwwwwwww
-END

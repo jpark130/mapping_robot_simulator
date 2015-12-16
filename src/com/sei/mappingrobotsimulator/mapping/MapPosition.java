@@ -32,11 +32,11 @@ public class MapPosition {
         MapPosition newPosition = null;
         switch (direction){
             case MOVE_DOWN:
-                newPosition = new MapPosition(currentPosition.getxCord(), currentPosition.getyCord() - distance, currentPosition.squareNumber);
+                newPosition = new MapPosition(currentPosition.getxCord(), currentPosition.getyCord() + distance, currentPosition.squareNumber);
                 break;
 
             case MOVE_UP:
-                newPosition = new MapPosition(currentPosition.getxCord(), currentPosition.getyCord() + distance, currentPosition.squareNumber);
+                newPosition = new MapPosition(currentPosition.getxCord(), currentPosition.getyCord() - distance, currentPosition.squareNumber);
                 break;
 
             case MOVE_LEFT:

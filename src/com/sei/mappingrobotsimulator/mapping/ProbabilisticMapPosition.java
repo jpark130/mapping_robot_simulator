@@ -41,4 +41,6 @@ public class ProbabilisticMapPosition extends MapPosition {
     public int getSquareNumber(){ return super.getSquareNumber();}
 
     public float getCertainty(){return certainty;}
+
+
 }
